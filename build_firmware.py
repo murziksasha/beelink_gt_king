@@ -13,7 +13,6 @@ SYSTEM_RAW = "system.raw"
 EXTRA_APPS_DIR = "extra_apps"
 TV_PERMS_DIR = "tv_permissions"
 APK_APP_DIR = "apk_app"
-BOOTANIM_DIR = "bootanim"
 
 def build():
     start_time = time.time()
@@ -35,9 +34,9 @@ def build():
     else:
         print(f"\n[Step 2/5] Using existing '{SYSTEM_RAW}' ({os.path.getsize(SYSTEM_RAW):,} bytes).")
 
-    # Step 3: Inject apps, permissions, Download folder APKs, and boot animation via WSL into system.raw
-    print(f"\n[Step 3/5] Injecting custom apps, TV permissions, Download folder APKs, and boot animation...")
-    modify_system_image(SYSTEM_RAW, EXTRA_APPS_DIR, TV_PERMS_DIR, apk_app_dir=APK_APP_DIR, bootanim_dir=BOOTANIM_DIR)
+    # Step 3: Inject apps, permissions, and Download folder APKs via WSL into system.raw
+    print(f"\n[Step 3/5] Injecting custom apps, TV permissions, and Download folder APKs...")
+    modify_system_image(SYSTEM_RAW, EXTRA_APPS_DIR, TV_PERMS_DIR, apk_app_dir=APK_APP_DIR)
 
     # Step 4: Convert modified system.raw back to sparse system.PARTITION
     print(f"\n[Step 4/5] Recompressing system.raw -> {SYSTEM_PARTITION} (Sparse ext4)...")

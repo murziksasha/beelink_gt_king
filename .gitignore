@@ -17,7 +17,6 @@ ENV/
 *.rar
 *.tar
 *.tar.gz
-!bootanim/*.zip
 
 # Unpacked partition files and intermediate firmware files
 unpacked/
@@ -30,9 +29,7 @@ tmp_bootanim/
 # Android binaries and native libraries
 *.apk
 *.so
-tv_priv_apps/
 !extra_apps/.gitkeep
-!apk_app/.gitkeep
 
 # Temporary / modified build artifacts
 *.tmp
