@@ -17,6 +17,7 @@ ENV/
 *.rar
 *.tar
 *.tar.gz
+!bootanim/*.zip
 
 # Unpacked partition files and intermediate firmware files
 unpacked/

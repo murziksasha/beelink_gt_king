@@ -97,7 +97,7 @@ def prepare_staging_apk_app(apk_app_dir: str, staging_dir: str):
 
     print(f"[Staging] Download folder items prepared: {copied_count}")
 
-def modify_system_image(raw_image_path: str, extra_apps_dir: str, tv_perms_dir: str, modified_build_prop: str = None, apk_app_dir: str = "apk_app"):
+def modify_system_image(raw_image_path: str, extra_apps_dir: str, tv_perms_dir: str, modified_build_prop: str = None, apk_app_dir: str = "apk_app", bootanim_dir: str = "bootanim"):
     print("=" * 60)
     print("Modifying system.raw image via WSL...")
     print("=" * 60)
@@ -111,9 +111,16 @@ def modify_system_image(raw_image_path: str, extra_apps_dir: str, tv_perms_dir: 
     staging_apk_dir = os.path.abspath("tmp_staging_apk_app")
     prepare_staging_apk_app(apk_app_dir, staging_apk_dir)
 
+    bootanim_zip = os.path.join(bootanim_dir, "bootanimation.zip") if bootanim_dir else None
+    if not (bootanim_zip and os.path.exists(bootanim_zip)):
+        alt_bootanim = os.path.join("tmp_bootanim", "bootanimation.zip")
+        if os.path.exists(alt_bootanim):
+            bootanim_zip = alt_bootanim
+
     wsl_raw = win_to_wsl_path(raw_image_path)
     wsl_staging = win_to_wsl_path(staging_dir)
     wsl_staging_apk = win_to_wsl_path(staging_apk_dir)
+    wsl_bootanim = win_to_wsl_path(bootanim_zip) if bootanim_zip and os.path.exists(bootanim_zip) else None
     wsl_perms = win_to_wsl_path(tv_perms_dir) if tv_perms_dir and os.path.exists(tv_perms_dir) else None
     wsl_prop = win_to_wsl_path(modified_build_prop) if modified_build_prop and os.path.exists(modified_build_prop) else None
 
@@ -305,8 +312,21 @@ def modify_system_image(raw_image_path: str, extra_apps_dir: str, tv_perms_dir: 
             "",
         ])
 
+    if wsl_bootanim:
+        bash_lines.extend([
+            "# 9. Inject Custom Boot Animation",
+            f"if [ -f '{wsl_bootanim}' ]; then",
+            f"    echo \"  -> Injecting custom bootanimation.zip into $SYS/media/bootanimation.zip\"",
+            "    mkdir -p \"$SYS/media\"",
+            f"    cp -f '{wsl_bootanim}' \"$SYS/media/bootanimation.zip\"",
+            "    chmod 644 \"$SYS/media/bootanimation.zip\"",
+            "    chown 0:0 \"$SYS/media/bootanimation.zip\"",
+            "fi",
+            "",
+        ])
+
     bash_lines.extend([
-        "# 9. Flush and unmount cleanly",
+        "# 10. Flush and unmount cleanly",
         "sync",
         "umount /tmp/sysmount",
         "echo 'ext4 modification complete and filesystem unmounted successfully.'",
