@@ -1,0 +1,48 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+.venv/
+venv/
+env/
+ENV/
+
+# Large firmware images and raw disk images (exceeds GitHub 100MB limit)
+*.img
+*.raw
+*.zip
+*.7z
+*.rar
+*.tar
+*.tar.gz
+
+# Unpacked partition files and intermediate firmware files
+unpacked/
+tmp_bootanim/
+*.PARTITION
+*.USB
+*.UBOOT
+*.dtb
+
+# Android binaries and native libraries
+*.apk
+*.so
+tv_priv_apps/
+!extra_apps/.gitkeep
+!apk_app/.gitkeep
+
+# Temporary / modified build artifacts
+*.tmp
+*.bak
+*.log
+build.prop.modified
+
+# OS & Editor specific files
+.DS_Store
+Thumbs.db
+Desktop.ini
+.vscode/
+.idea/
+*.swp
